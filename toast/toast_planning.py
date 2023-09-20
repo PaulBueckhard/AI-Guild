@@ -100,11 +100,28 @@ def state_transition(state, action):
 # 3) Implement a function that fulfills 2) and is as fast as possible!
 ###################################################
 def plan(start_state):
-    # TODO: implement me!
+    queue = [(start_state, [])]
+    front = 0  # Index of the front element in the queue
 
-    # this is an example output that will fulfill the first test, but no others.
-    # Substitute this by your planning result
-    return ["plug_in_toaster","put_in_bread","switch_on_toaster","wait","take_out_bread"]
+    while front < len(queue):
+        current_state, current_plan = queue[front]
+        front += 1
+
+        # Check if the current state satisfies the goal
+        if goal(current_state):
+            return current_plan
+
+        # Generate possible actions and explore new states
+        for action in actions:
+            new_state = state_transition(current_state, action)
+
+            # Only consider valid actions that lead to a new state
+            if new_state != current_state:
+                new_plan = current_plan + [action]
+                queue.append((new_state, new_plan))
+
+    # If no plan is found, return an empty list
+    return []
 
 
 # this is a test function. It tests your plan function 
